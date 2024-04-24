@@ -30,18 +30,24 @@ export async function POST(req: NextRequest) {
       }
     );
 
-  return await fetch(
-    `${process.env.DEEPGRAM_STT_DOMAIN}/v1/speak?model=${model}`,
-    {
-      method: "POST",
-      body: JSON.stringify({ text }),
-      headers: {
-        "Content-Type": `application/json`,
-        Authorization: `token ${process.env.DEEPGRAM_API_KEY || ""}`,
-        "X-DG-Referrer": url,
+  const options = {
+    method: "POST",
+    headers: {
+      "xi-api-key": `${process.env.ELEVEN_LABS_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      text: text,
+      voice_settings: {
+        stability: 0.5,
+        similarity_boost: 0.71,
       },
-    }
-  )
+    }),
+  };
+
+  const endpoint = `https://api.elevenlabs.io/v1/text-to-speech/${process.env.ELEVEN_LABS_VOICE_ID}`;
+
+  return await fetch(endpoint, options)
     .then(async (response) => {
       const headers = new Headers();
       headers.set("X-DG-Latency", `${Date.now() - start}`);
