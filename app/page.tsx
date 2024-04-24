@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import GitHubButton from "react-github-btn";
+import Image from 'next/image';
+import GitHubButton from 'react-github-btn';
 
-export const runtime = "edge";
-import { init } from "@fullstory/browser";
-import { useEffect } from "react";
-import { XIcon } from "./components/icons/XIcon";
-import { FacebookIcon } from "./components/icons/FacebookIcon";
-import { LinkedInIcon } from "./components/icons/LinkedInIcon";
-import Conversation from "./components/Conversation";
+export const runtime = 'edge';
+import { init } from '@fullstory/browser';
+import { useEffect } from 'react';
+import { XIcon } from './components/icons/XIcon';
+import { FacebookIcon } from './components/icons/FacebookIcon';
+import { LinkedInIcon } from './components/icons/LinkedInIcon';
+import AudioComponent from '@/app/components/AudioComponent';
 
 export default function Home() {
   useEffect(() => {
-    init({ orgId: "5HWAN" });
+    init({ orgId: '5HWAN' });
   }, []);
 
   return (
@@ -62,7 +62,8 @@ export default function Home() {
 
         {/* height 100% minus 8rem */}
         <main className="mx-auto max-w-7xl  px-4 md:px-6 lg:px-8 h-[calc(100%-8rem)]">
-          <Conversation />
+          {/*<Conversation />*/}
+          <AudioComponent />
         </main>
 
         {/* height 4rem */}
@@ -73,9 +74,9 @@ export default function Home() {
               href="#"
               onClick={(e) => {
                 window.open(
-                  "https://twitter.com/intent/tweet?text=%F0%9F%94%A5%F0%9F%8E%89%20Check%20out%20this%20awesome%20%23AI%20demo%20by%20%40Deepgram%20and%20%40lukeocodes%0A%0A%20https%3A//aura-tts-demo.deepgram.com",
-                  "",
-                  "_blank, width=600, height=500, resizable=yes, scrollbars=yes"
+                  'https://twitter.com/intent/tweet?text=%F0%9F%94%A5%F0%9F%8E%89%20Check%20out%20this%20awesome%20%23AI%20demo%20by%20%40Deepgram%20and%20%40lukeocodes%0A%0A%20https%3A//aura-tts-demo.deepgram.com',
+                  '',
+                  '_blank, width=600, height=500, resizable=yes, scrollbars=yes'
                 );
 
                 return e.preventDefault();
@@ -89,9 +90,9 @@ export default function Home() {
               href="#"
               onClick={(e) => {
                 window.open(
-                  "https://www.linkedin.com/shareArticle?mini=true&url=https%3A//aura-tts-demo.deepgram.com&title=Excellent review on my website reviews",
-                  "",
-                  "_blank, width=600, height=500, resizable=yes, scrollbars=yes"
+                  'https://www.linkedin.com/shareArticle?mini=true&url=https%3A//aura-tts-demo.deepgram.com&title=Excellent review on my website reviews',
+                  '',
+                  '_blank, width=600, height=500, resizable=yes, scrollbars=yes'
                 );
 
                 return e.preventDefault();
@@ -104,9 +105,9 @@ export default function Home() {
               href="#"
               onClick={(e) => {
                 window.open(
-                  "https://www.facebook.com/sharer/sharer.php?u=https%3A//aura-tts-demo.deepgram.com",
-                  "",
-                  "_blank, width=600, height=500, resizable=yes, scrollbars=yes"
+                  'https://www.facebook.com/sharer/sharer.php?u=https%3A//aura-tts-demo.deepgram.com',
+                  '',
+                  '_blank, width=600, height=500, resizable=yes, scrollbars=yes'
                 );
 
                 return e.preventDefault();

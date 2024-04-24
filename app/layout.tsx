@@ -1,37 +1,40 @@
-import { GoogleTagManager } from "@next/third-parties/google";
-import { Inter } from "next/font/google";
-import { NowPlayingContextProvider } from "react-nowplaying";
-import classNames from "classnames";
-import localFont from "next/font/local";
-import Script from "next/script";
+import { GoogleTagManager } from '@next/third-parties/google';
+import { Inter } from 'next/font/google';
+import { NowPlayingContextProvider } from 'react-nowplaying';
+import classNames from 'classnames';
+import localFont from 'next/font/local';
+import Script from 'next/script';
 
-import { DeepgramContextProvider } from "./context/Deepgram";
-import { MessageMetadataContextProvider } from "./context/MessageMetadata";
-import { MicrophoneContextProvider } from "./context/Microphone";
-import { AudioStoreContextProvider } from "./context/AudioStore";
-import { ToastContextProvider } from "./context/Toast";
+import { DeepgramContextProvider } from './context/Deepgram';
+import { MessageMetadataContextProvider } from './context/MessageMetadata';
+import { MicrophoneContextProvider } from './context/Microphone';
+import { AudioStoreContextProvider } from './context/AudioStore';
+import { ToastContextProvider } from './context/Toast';
 
 import 'react-toastify/dist/ReactToastify.css';
-import "./globals.css";
+import './globals.css';
 
-import type { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from 'next';
+import WebSocketContext, {
+  WebSocketProvider,
+} from '@/app/components/websocketProvider';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 const favorit = localFont({
-  src: "./fonts/ABCFavorit-Bold.woff2",
-  variable: "--font-favorit",
+  src: './fonts/ABCFavorit-Bold.woff2',
+  variable: '--font-favorit',
 });
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: '#000000',
   initialScale: 1,
-  width: "device-width",
+  width: 'device-width',
   // maximumScale: 1, hitting accessability
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://aura-tts-demo.deepgram.com"),
-  title: "Deepgram AI Agent",
+  metadataBase: new URL('https://aura-tts-demo.deepgram.com'),
+  title: 'Deepgram AI Agent',
   description: `Deepgram's AI Agent Demo shows just how fast Speech-to-Text and Text-to-Speech can be.`,
   robots: {
     index: false,
@@ -53,15 +56,19 @@ export default function RootLayout({
         )}`}
       >
         <ToastContextProvider>
-          <MicrophoneContextProvider>
-            <AudioStoreContextProvider>
-              <NowPlayingContextProvider>
-                <MessageMetadataContextProvider>
-                  <DeepgramContextProvider>{children}</DeepgramContextProvider>
-                </MessageMetadataContextProvider>
-              </NowPlayingContextProvider>
-            </AudioStoreContextProvider>
-          </MicrophoneContextProvider>
+          <WebSocketProvider>
+            <MicrophoneContextProvider>
+              <AudioStoreContextProvider>
+                <NowPlayingContextProvider>
+                  <MessageMetadataContextProvider>
+                    {/*<DeepgramContextProvider>*/}
+                    {children}
+                    {/*</DeepgramContextProvider>*/}
+                  </MessageMetadataContextProvider>
+                </NowPlayingContextProvider>
+              </AudioStoreContextProvider>
+            </MicrophoneContextProvider>
+          </WebSocketProvider>
         </ToastContextProvider>
         <GoogleTagManager gtmId="GTM-5R73N627" />
         <Script
