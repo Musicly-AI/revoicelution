@@ -5,7 +5,6 @@ import { useCallback, useEffect } from "react";
 import { Download } from "./Download";
 import { MicrophoneIcon } from "./icons/MicrophoneIcon";
 import { SendIcon } from "./icons/SendIcon";
-import { Settings } from "./Settings";
 import { useMicrophone } from "../context/Microphone";
 import { useNowPlaying } from "react-nowplaying";
 
@@ -55,7 +54,6 @@ export const Controls = ({
     <form onSubmit={submitter}>
       <div className="relative">
         <div className="absolute w-full -top-[4.5rem] py-4 flex justify-between">
-          <Settings />
           <Download messages={messages} />
         </div>
         <div className="flex bg-[#101014] rounded-full">
