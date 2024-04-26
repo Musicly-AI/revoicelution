@@ -41,6 +41,8 @@ export default function Conversation(): JSX.Element {
   const { addAudio } = useAudioStore();
   const { player, stop: stopAudio, play: startAudio } = useNowPlaying();
   const { addMessageData } = useMessageData();
+  const [userIsSpeaking, setUserIsSpeaking] = useState(false);
+
   const {
     microphoneOpen,
     queue: microphoneQueue,
@@ -170,11 +172,12 @@ export default function Conversation(): JSX.Element {
      * So ignore any VAD events before we "open" the mic.
      */
     console.log('VAD speech end');
+    setUserIsSpeaking(false);
     if (!microphoneOpen) return;
 
     setFailsafeTimeout(
       setTimeout(() => {
-        if (currentUtterance) {
+        if (currentUtterance && !userIsSpeaking) {
           console.log('failsafe fires! pew pew!!');
           setFailsafeTriggered(true);
           append({
@@ -184,7 +187,7 @@ export default function Conversation(): JSX.Element {
           clearTranscriptParts();
           setCurrentUtterance(undefined);
         }
-      }, 2500)
+      }, 1000)
     );
 
     return () => {
@@ -201,6 +204,8 @@ export default function Conversation(): JSX.Element {
      * So ignore any VAD events before we "open" the mic.
      */
     console.log('VAD speech start');
+    setUserIsSpeaking(true);
+
     if (!microphoneOpen) return;
 
     /**
@@ -220,8 +225,8 @@ export default function Conversation(): JSX.Element {
     onSpeechStart,
     onSpeechEnd,
     positiveSpeechThreshold: 0.8,
-    negativeSpeechThreshold: 0.8 - 0.25,
-    redemptionFrames: 40,
+    negativeSpeechThreshold: 0.8 - 0.15,
+    redemptionFrames: 10,
   });
 
   useEffect(() => {
@@ -355,7 +360,8 @@ export default function Conversation(): JSX.Element {
     /**
      * if the last part of the utterance, empty or not, is speech_final, send to the LLM.
      */
-    if (last && last.speech_final) {
+    if (last && last.speech_final && !userIsSpeaking) {
+      console.log("sending to LLM, we're done talking");
       clearTimeout(failsafeTimeout);
       append({
         role: 'user',
