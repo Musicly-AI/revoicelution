@@ -401,26 +401,22 @@ export default function Conversation(): JSX.Element {
       if (microphoneQueueSize > 0 && !isProcessing) {
         setProcessing(true);
 
-        // Instead of a static timeout, we immediately reset the processing state
-        // if the connection is not ready or there is no blob to process.
-        if (connectionReady && firstBlob && firstBlob.size > 0) {
-          connection?.send(nextBlob);
+        if (connectionReady) {
+          const nextBlob = firstBlob;
+
+          if (nextBlob && nextBlob?.size > 0) {
+            connection?.send(nextBlob);
+          }
+
           removeBlob();
-        } else {
-          setProcessing(false); // Early reset if nothing to send
-          return; // Exit early to avoid setting the timeout unnecessarily
         }
 
-        // Consider dynamically adjusting or removing this timeout based on system capability.
         const waiting = setTimeout(() => {
+          clearTimeout(waiting);
           setProcessing(false);
-        }, 200);
-
-        // Clear the timeout when the effect cleanup runs
-        return () => clearTimeout(waiting);
+        }, 100);
       }
     };
-
     processQueue();
   }, [
     connection,
