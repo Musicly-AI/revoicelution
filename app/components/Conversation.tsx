@@ -43,6 +43,10 @@ export default function Conversation(): JSX.Element {
   const { addMessageData } = useMessageData();
   const [userIsSpeaking, setUserIsSpeaking] = useState(false);
 
+  // var to measure time
+  const [transcriptionStart, setTranscriptionStart] = useState(null);
+  const [transcriptionEnd, setTranscriptionEnd] = useState(null);
+
   const {
     microphoneOpen,
     queue: microphoneQueue,
@@ -91,6 +95,7 @@ export default function Conversation(): JSX.Element {
       const blob = await res.blob();
 
       startAudio(blob, 'audio/mp3', message.id).then(() => {
+        console.log("received audio, let's play it!, ", message.id);
         addAudio({
           id: message.id,
           blob,
@@ -118,9 +123,15 @@ export default function Conversation(): JSX.Element {
 
   const onResponse = useCallback((res: Response) => {
     (async () => {
+      const start = Number(res.headers.get('x-llm-start'));
+      const response = Number(res.headers.get('x-llm-response'));
+      // Log the time taken using these local variables
+      console.log('time taken to get response: ', response - start);
+
+      // Then, update your state with these values
       setLlmNewLatency({
-        start: Number(res.headers.get('x-llm-start')),
-        response: Number(res.headers.get('x-llm-response')),
+        start: start,
+        response: response,
       });
     })();
   }, []);
@@ -177,7 +188,7 @@ export default function Conversation(): JSX.Element {
 
     setFailsafeTimeout(
       setTimeout(() => {
-        if (currentUtterance && !userIsSpeaking) {
+        if (currentUtterance) {
           console.log('failsafe fires! pew pew!!');
           setFailsafeTriggered(true);
           append({
@@ -187,7 +198,7 @@ export default function Conversation(): JSX.Element {
           clearTranscriptParts();
           setCurrentUtterance(undefined);
         }
-      }, 1000)
+      }, 100)
     );
 
     return () => {
@@ -360,7 +371,11 @@ export default function Conversation(): JSX.Element {
     /**
      * if the last part of the utterance, empty or not, is speech_final, send to the LLM.
      */
-    if (last && last.speech_final && !userIsSpeaking) {
+    if (last && last.speech_final) {
+      // if (userIsSpeaking) {
+      //   console.log("User is speaking, don't send to LLM");
+      //   return;
+      // }
       console.log("sending to LLM, we're done talking");
       clearTimeout(failsafeTimeout);
       append({
@@ -399,10 +414,9 @@ export default function Conversation(): JSX.Element {
         const waiting = setTimeout(() => {
           clearTimeout(waiting);
           setProcessing(false);
-        }, 200);
+        }, 100);
       }
     };
-
     processQueue();
   }, [
     connection,
