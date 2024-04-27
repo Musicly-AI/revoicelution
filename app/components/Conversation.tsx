@@ -404,7 +404,7 @@ export default function Conversation(): JSX.Element {
         // Instead of a static timeout, we immediately reset the processing state
         // if the connection is not ready or there is no blob to process.
         if (connectionReady && firstBlob && firstBlob.size > 0) {
-          connection.send(firstBlob);
+          connection?.send(nextBlob);
           removeBlob();
         } else {
           setProcessing(false); // Early reset if nothing to send
