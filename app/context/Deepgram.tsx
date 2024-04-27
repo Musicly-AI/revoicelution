@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   CreateProjectKeyResponse,
@@ -6,7 +6,7 @@ import {
   LiveSchema,
   LiveTranscriptionEvents,
   SpeakSchema,
-} from "@deepgram/sdk";
+} from '@deepgram/sdk';
 import {
   Dispatch,
   SetStateAction,
@@ -15,8 +15,8 @@ import {
   useContext,
   useEffect,
   useState,
-} from "react";
-import { useToast } from "./Toast";
+} from 'react';
+import { useToast } from './Toast';
 
 type DeepgramContext = {
   ttsOptions: SpeakSchema | undefined;
@@ -44,77 +44,77 @@ const voices: {
     accent: string;
   };
 } = {
-  "aura-asteria-en": {
-    name: "Asteria",
-    avatar: "/aura-asteria-en.svg",
-    language: "English",
-    accent: "US",
+  'aura-asteria-en': {
+    name: 'Asteria',
+    avatar: '/aura-asteria-en.svg',
+    language: 'English',
+    accent: 'US',
   },
-  "aura-luna-en": {
-    name: "Luna",
-    avatar: "/aura-luna-en.svg",
-    language: "English",
-    accent: "US",
+  'aura-luna-en': {
+    name: 'Luna',
+    avatar: '/aura-luna-en.svg',
+    language: 'English',
+    accent: 'US',
   },
-  "aura-stella-en": {
-    name: "Stella",
-    avatar: "/aura-stella-en.svg",
-    language: "English",
-    accent: "US",
+  'aura-stella-en': {
+    name: 'Stella',
+    avatar: '/aura-stella-en.svg',
+    language: 'English',
+    accent: 'US',
   },
-  "aura-athena-en": {
-    name: "Athena",
-    avatar: "/aura-athena-en.svg",
-    language: "English",
-    accent: "UK",
+  'aura-athena-en': {
+    name: 'Athena',
+    avatar: '/aura-athena-en.svg',
+    language: 'English',
+    accent: 'UK',
   },
-  "aura-hera-en": {
-    name: "Hera",
-    avatar: "/aura-hera-en.svg",
-    language: "English",
-    accent: "US",
+  'aura-hera-en': {
+    name: 'Hera',
+    avatar: '/aura-hera-en.svg',
+    language: 'English',
+    accent: 'US',
   },
-  "aura-orion-en": {
-    name: "Orion",
-    avatar: "/aura-orion-en.svg",
-    language: "English",
-    accent: "US",
+  'aura-orion-en': {
+    name: 'Orion',
+    avatar: '/aura-orion-en.svg',
+    language: 'English',
+    accent: 'US',
   },
-  "aura-arcas-en": {
-    name: "Arcas",
-    avatar: "/aura-arcas-en.svg",
-    language: "English",
-    accent: "US",
+  'aura-arcas-en': {
+    name: 'Arcas',
+    avatar: '/aura-arcas-en.svg',
+    language: 'English',
+    accent: 'US',
   },
-  "aura-perseus-en": {
-    name: "Perseus",
-    avatar: "/aura-perseus-en.svg",
-    language: "English",
-    accent: "US",
+  'aura-perseus-en': {
+    name: 'Perseus',
+    avatar: '/aura-perseus-en.svg',
+    language: 'English',
+    accent: 'US',
   },
-  "aura-angus-en": {
-    name: "Angus",
-    avatar: "/aura-angus-en.svg",
-    language: "English",
-    accent: "Ireland",
+  'aura-angus-en': {
+    name: 'Angus',
+    avatar: '/aura-angus-en.svg',
+    language: 'English',
+    accent: 'Ireland',
   },
-  "aura-orpheus-en": {
-    name: "Orpheus",
-    avatar: "/aura-orpheus-en.svg",
-    language: "English",
-    accent: "US",
+  'aura-orpheus-en': {
+    name: 'Orpheus',
+    avatar: '/aura-orpheus-en.svg',
+    language: 'English',
+    accent: 'US',
   },
-  "aura-helios-en": {
-    name: "Helios",
-    avatar: "/aura-helios-en.svg",
-    language: "English",
-    accent: "UK",
+  'aura-helios-en': {
+    name: 'Helios',
+    avatar: '/aura-helios-en.svg',
+    language: 'English',
+    accent: 'UK',
   },
-  "aura-zeus-en": {
-    name: "Zeus",
-    avatar: "/aura-zeus-en.svg",
-    language: "English",
-    accent: "US",
+  'aura-zeus-en': {
+    name: 'Zeus',
+    avatar: '/aura-zeus-en.svg',
+    language: 'English',
+    accent: 'US',
   },
 };
 
@@ -124,7 +124,7 @@ const voiceMap = (model: string) => {
 
 const getApiKey = async (): Promise<string> => {
   const result: CreateProjectKeyResponse = await (
-    await fetch("/api/authenticate", { cache: "no-store" })
+    await fetch('/api/authenticate', { cache: 'no-store' })
   ).json();
 
   return result.key;
@@ -146,11 +146,11 @@ const DeepgramContextProvider = ({ children }: DeepgramContextInterface) => {
         await getApiKey(),
         {},
         {
-          model: "nova-2",
+          model: 'nova-2-conversationalai',
           interim_results: true,
           smart_format: true,
-          endpointing: 550,
-          utterance_end_ms: 1500,
+          endpointing: 50,
+          utterance_end_ms: 1000,
           filler_words: true,
         }
       );
@@ -169,13 +169,13 @@ const DeepgramContextProvider = ({ children }: DeepgramContextInterface) => {
      */
     if (ttsOptions === undefined) {
       setTtsOptions({
-        model: "aura-asteria-en",
+        model: 'aura-asteria-en',
       });
     }
 
     if (!sttOptions === undefined) {
       setSttOptions({
-        model: "nova-2",
+        model: 'nova-2',
         interim_results: true,
         smart_format: true,
         endpointing: 350,
